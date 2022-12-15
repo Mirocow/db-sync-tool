@@ -31,8 +31,8 @@ def create_origin_database_dump():
             True
         )
 
-        _mysqldump_options = '--no-tablespaces '
-        # Remove --no-tablespaces option for mysql < 5.6
+        _mysqldump_options = '--no-tablespaces --column-statistics=0 '
+        # Remove --no-tablespaces --column-statistics=0 option for mysql < 5.6
         # @ToDo: Better option handling
         if not _database_version is None:
             if _database_version[0] == database_utility.DatabaseSystem.MYSQL and \
@@ -40,7 +40,7 @@ def create_origin_database_dump():
                 _mysqldump_options = ''
 
         # Run mysql dump command, e.g.
-        # mysqldump --no-tablespaces -u'db' -p'db' -h'db1' -P'3306' 'db'  > /tmp/_db_08-10-2021_07-00.sql
+        # mysqldump --no-tablespaces --column-statistics=0 -u'db' -p'db' -h'db1' -P'3306' 'db'  > /tmp/_db_08-10-2021_07-00.sql
         mode.run_command(
             helper.get_command(mode.Client.ORIGIN, 'mysqldump') + ' ' + _mysqldump_options +
             database_utility.generate_mysql_credentials(mode.Client.ORIGIN) + ' \'' +
